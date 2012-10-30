@@ -18,7 +18,9 @@ Haskell n'est pas le plus connu d'entre eux, pour des raisons historiques, mais 
 
 Les bibliothèques sont des morceaux de programmes que d'autres personnes ont écrit pour nous, pour éviter qu'on reparte de zéro à chaque fois, qu'on ré-invente la roue.
 Par exemple, il existe une bibliothèque qui dessine des fenêtres pour nous. Si nous devions le faire à chaque fois, on devrait dessiner pixel par pixel sa barre, ses boutons, ses bords, etc. avec beaucoup de rectangles, de cercles, d'icônes, alors que la bibliothèque peut le faire à notre place.
-C'est un des principes de la programmation : l'automatisation : l'être humain dit une seule fois à la machine comment faire, et la machine le répète autant de fois que nécessaire.
+
+C'est un des principes chers à l'informatique et donc la programmation : l'automatisation : l'être humain dit une seule fois à la machine comment faire, et la machine le répète autant de fois que nécessaire.
+D'ailleurs, le mot "informatique", qui a été inventé par [Philippe Dreyfus](https://fr.wikipedia.org/wiki/Philippe_Dreyfus) est la contraction d'"information automatique". Le terme anglais, "computing", signifie plutôt "l'activité de calculer".
 
 Nous allons utiliser la bibliothèque Gloss, qui nous permet d'afficher des graphismes et de gérer l'interaction avec l'utilisateur, le joueur, d'une façon très simple et élégante.
 

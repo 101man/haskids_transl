@@ -72,7 +72,7 @@ L'expression suit cette forme :
 
 ### `translate`
 
-On peut également positionner l'image sur la fenêtre.
+On peut également déplacer l'image sur la fenêtre.
 
 	import Graphics.Gloss
 
@@ -84,6 +84,8 @@ On peut également positionner l'image sur la fenêtre.
 Dans `translate 100 50`, le premier nombre indique que l'image doit être déplacée de 100 pixels vers la droite et le second nombre de 50 pixels vers le haut.
 Essayez aussi avec `translate 0 (-45)` : l'image ne se déplace pas horizontalement et se déplace de 45 pixels vers le bas. En Haskell, il faut écrire les nombres négatifs, comme `(-45)` entre parenthèses, sinon Haskell ne sait pas s'il s'agit d'une soustraction, comme `0 - 45` ou d'un nombre négatif.
 Le premier nombre indique le déplacement horizontal et le second le vertical. Si l'on écrit `0`, il n'y a aucun déplacement, si on écrit un nombre négatif, ce sera un déplacement vers la gauche pour le premier nombre et un vers le bas pour le second.
+
+La position de départ d'une image est `0` sur l'axe horizontal et `0` sur l'axe vertical, ce qui correspond, dans Gloss, au centre de l'écran.
 
 ### `rotate`
 
@@ -126,7 +128,8 @@ Par exemple, on applique `scale` sur l'image avant de de la tourner avec `rotate
 Par contre, on peut utiliser `color` à n'importe-quel moment.
 `translate` peut également être utilisé n'importe-quand, parce-que l'image est positionnée et tournée en son centre.
 
-{Trouver un autre exemple.}
+{Trouver un autre exemple.
+Une image abstraite, par exemple.}
 
 Un visage d'une créature issue d'un autre monde.
 
