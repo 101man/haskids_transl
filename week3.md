@@ -28,7 +28,7 @@ Essayez de deviner les images que les codes produisent avant de les exécuter.
 {Quand on met 0 élément ? 1 ?}
 
 Voici une image, tirée de [Berkeley Science](http://www.berkeleyscience.com/relativity.htm), qui présente un repère avec des points et leurs coordonnées.
-http://cdsmith.files.wordpress.com/2011/08/coordinates.jpg {image markdown?}
+![Coordonnées cartésiennes](http://cdsmith.files.wordpress.com/2011/08/coordinates.jpg)
 Prenons par exemple le point rouge. Il a pour coordonnées (-3,1). -3 est sa position horizontalle et 1 est sa position verticale. La position horizontalle s'appelle la coordonnée x et la position verticale la coordonnée y, parce-que ces lettres sont plus courtes.
 Ces coordonnées sont appelées cartésiennes, parce-que Descartes est à l'origine de la géométrie avec repères {développer}
 
@@ -48,40 +48,40 @@ et avec `polygon` :
 Dans la liste de `line`, le premier et le dernier point sont les mêmes : `(`, alors que dans `polygon`, le premier point n'apparaît qu'au début. {reprendre le code en coloriant les tuples des points pour les reconnaître}
 
 	import Graphics.Gloss
-	picture = polygon [
-		(-200, -200),
-		( 200, -200),
-		( 200,  200),
-		(-200,  200)
+	picture = polygon
+		[ (-200, -200)
+		, ( 200, -200)
+		, ( 200,  200)
+		, (-200,  200)
 		]
 
-Voici la forme annoncée dans l'introduction de cette partie.
+Voici la figure annoncée dans l'introduction de cette partie.
 
 	import Graphics.Gloss
 
 	picture = stars
 
 	stars = pictures [
-		translate ( 100) ( 100) (color blue   star),
+		translate 100 100 (color blue star),
 		translate (-100) (-100) (color yellow star),
-		translate (   0) (   0) (color red    star)
+		translate 0 0 (color red star)
 		]
 
-	star = polygon [
-		(  0,  50),
-		( 10,  20),
-		( 40,  20),
-		( 20,   0),
-		( 30, -30),
-		(  0, -10),
-		(-30, -30),
-		(-20,   0),
-		(-40,  20),
-		(-10,  20),
-		(  0,  50)
+	star = polygon
+		[ (0, 50)
+		, (10, 20)
+		, (40, 20)
+		, (20, 0)
+		, (30, -30)
+		, (0, -10)
+		, (-30, -30)
+		, (-20, 0)
+		, (-40, 20)
+		, (-10, 20)
+		, (0, 50)
 		]
 
-http://cdsmith.files.wordpress.com/2011/08/stars.png {image}
+![Image du programme : étoiles](http://cdsmith.files.wordpress.com/2011/08/stars.png)
 
 Les polygônes sont donc en quelque sorte des lignes spécialisées.
 
@@ -99,7 +99,7 @@ Exemple d'un carré colorié en rouge :
 
 #### Combinaison des deux
 
-Vous pouvez utiliser les deux si vous voulez que votre figure ait une couleur de bordure et de remplissage.
+Vous pouvez utiliser les deux si vous voulez que votre figure ait une couleur de bordure et une de remplissage.
 
 Cependant, c'est très répétitif, ce qui ne doit pas être le cas en programmation.
 Voici une fonction qui automatise cette opération et que vous pouvez coller à la fin de votre fichier pour l'utiliser.
@@ -109,7 +109,9 @@ Voici une fonction qui automatise cette opération et que vous pouvez coller à 
 		, color fill (polygon (x:xs:[]))
 		]
 
-Pour l'utiliser, par exemple, remplacez l'ancienne expression {mal écrit} par `polygonLine {} violet red`.
+Le premier paramètre est la liste des sommets du polygône, le second la couleur de ses côtés et le dernier la couleur de sa surface.
+
+Remplacez l'ancienne expression, la répétitive, par `polygonLine {} violet red`.
 
 ### Les fonctions
 
@@ -123,28 +125,26 @@ Nous allons "compiler" le programme suivant :
 
 	import Graphics.Gloss
 
-	picture = color myFavoriteColor (circle 100)
-
-	myFavoriteColor = blue
+	picture = stars
 
 	stars = pictures [
-		translate ( 100) ( 100) (color blue   star),
+		translate 100 100 (color blue star),
 		translate (-100) (-100) (color yellow star),
-		translate (   0) (   0) (color red    star)
+		translate 0 0 (color red star)
 		]
 
-	star = polygon [
-		(  0,  50),
-		( 10,  20),
-		( 40,  20),
-		( 20,   0),
-		( 30, -30),
-		(  0, -10),
-		(-30, -30),
-		(-20,   0),
-		(-40,  20),
-		(-10,  20),
-		(  0,  50)
+	star = polygon
+		[ (0, 50)
+		, (10, 20)
+		, (40, 20)
+		, (20, 0)
+		, (30, -30)
+		, (0, -10)
+		, (-30, -30)
+		, (-20, 0)
+		, (-40, 20)
+		, (-10, 20)
+		, (0, 50)
 		]
 
  * Je commence à lire le programme du haut.
@@ -154,6 +154,8 @@ Nous allons "compiler" le programme suivant :
  * Maintenant, je connais tout ce dont j'ai besoin pour définir `picture` ; j'ai donc fini de lire le programme. J'ouvre une fenêtre et je dessine un cercle bleu.
 
 Vous vous demandez peut-être ce qu'il advient de `stars` et de `star`. Elles sont bien définies dans le fichier, mais elles ne sont pas utilisées pour définir `picture`. La simple existence d'un mot dans un dictionnaire ne signifie pas que vous en avez besoin. Le compilateur se préoccupe seulement de `picture`, et s'il ne voit pas mention de `stars` ou `star` dans sa définition ou dans la définition de `myFavoriteColor`, il ne lit pas la leur, parce-que c'est inutile.
+
+Ce comportement fait partie de l'évaluation paresseuse, ou "lazy evaluation", spécifique à Haskell.
 
 ## Exercice
 
@@ -165,9 +167,9 @@ Sur une feuille de papier millimettré, dessinez un point au centre, qui corresp
 	picture = rotate 45 (rectangleWire 150 150)
 
 	import Graphics.Gloss
-	picture = rotate 135 (pictures [
-		circle 50,
-		rectangleWire 10 100
+	picture = rotate 135 (pictures
+		[ circle 50
+		, rectangleWire 10 100
 		])
 
 	import Graphics.Gloss

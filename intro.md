@@ -28,10 +28,10 @@ Nous allons utiliser la bibliothèque Gloss, qui nous permet d'afficher des grap
 
 ## Plan
 
-Nous allons, dans cet ordre de progression :
- * Écrire des programmes informatiques pour tirer des photos.
- * Changer nos programmes informatiques pour le passage photos!
- * Construire un jeu de votre choix.
+Nous allons, dans cet ordre de progression, écrire des programmes informatiques pour :
+ * afficher des images immobiles.
+ * afficher des images animées.
+ * réaliser un jeu, c'est-à-dire afficher des images animées en fonction de l'interaction avec le joueur et d'un monde virtuel en mouvement.
 Cela va prendre plusieurs semaines.
 
 ## Objectifs
@@ -39,6 +39,11 @@ Cela va prendre plusieurs semaines.
 Ce cours n'est pas destiné à une simple mémorisation de programmes informatiques.
 Il s'agit d'être créatif, d'expérimenter, de réaliser un programme qui nous plait.
 Après la théorie, beaucoup de temps sera réservé à la pratique, afin d'essayer les nouveaux concepts étudiés avec vos idées.
+
+## Comment profiter de ce cours
+
+Ce cours apprend principalement à utiliser Gloss mais aussi plus généralement Haskell. Il introduit parfois des termes informatiques et des informations culturelles. Ce n'est pas grave si vous ne parvenez pas à tout retenir, ni si vous ne comprenez pas du premier coup. Réfléchissez un peu, relisez, puis passez à la suite, et revenez-y plus tard. Les concepts importants s'apprendront facilement à force d'être exploités à de nombreuses reprises. Les concepts sont toujours assortis d'exemples et de travaux pratiques à la fin.
+Certains paragraphes et certaines parties sont longs, mais ils ne développent qu'une idée de façon à ce qu'elle soit comprise.
 
 # C'est parti !
 

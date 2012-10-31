@@ -2,6 +2,8 @@
 
 ## Cours
 
+{séparer la syntaxe et les bonnes habitudes ou les réunir ?}
+
 ## La syntaxe Haskell
 
 {ramener module ici et how to think like a compiler}
@@ -146,6 +148,10 @@ On voit que le mot à qui est assigné l'expression s'appelle en fait une foncti
 
 Capitalization:  Whether words are capitalized or not matters!  So, for example, red works fine as a color, but Red doesn’t work! 
 
+There, the function is cute and the argument is elephant, so to figure out what that means you just replace x with elephant every time it shows up in the function definition for cute!
+
+{exemple : awesome et cute}
+
 ### L'import de module
 
 Un import permet d'utiliser un module dans notre code en indiquant au compilateur Haskell quel est son nom afin qu'il nous donne accès à ses fonctions.
@@ -172,6 +178,8 @@ Beaucoup de bibliothèques sont importées par défaut, comme `Data.List`, qui v
 La syntaxe de base est `import categorie.bibliothèque`, comme dans :
 
 	import Graphics.Gloss
+
+Séparation en fichiers puis en bibliothèques.
 
 ## Organiser son code
 
@@ -202,16 +210,18 @@ Pour tester quelques fonctions ou s'amuser, ce n'est pas un problème.
 
 Nous vous conseillons fortement de suivre les principes d'organisation suivants.
 
-> "Any fool can write programs that a computer can understand.  Good programmers write code that humans can understand."
-Martin Fowler
+{Traduire les citations}
 
-> "Great software, likewise, requires a fanatical devotion to beauty.  If you look inside good software, you find that the parts no one is ever supposed to see are beautiful, too.  I’m not claiming I write great software, but I know that when it comes to code, I behave in a way that would make me eligible for prescription drugs if I approached everyday life the same way.  It drives me crazy to see code that’s badly indented, or that uses ugly variable names."
-Paul Graham
+Martin Fowler, {qui}, a dit :
+> Any fool can write programs that a computer can understand.  Good programmers write code that humans can understand.
 
-> "There are two ways of writing computer programs: One way is to make it so simple that there are obviously no mistakes.  The other way is to make it so complicated that there are no obvious mistakes."
-C.A.R. Hoare
+Paul Graham, {qui}, a dit :
+> Great software, likewise, requires a fanatical devotion to beauty.  If you look inside good software, you find that the parts no one is ever supposed to see are beautiful, too.  I’m not claiming I write great software, but I know that when it comes to code, I behave in a way that would make me eligible for prescription drugs if I approached everyday life the same way.  It drives me crazy to see code that’s badly indented, or that uses ugly variable names.
 
-The last one is actually slightly misquoted.  I didn’t correct it because the original version means nearly the same thing but uses more technical language.
+C.A.R. Hoare a dit :
+> There are two ways of writing computer programs: One way is to make it so simple that there are obviously no mistakes.  The other way is to make it so complicated that there are no obvious mistakes.
+
+Cette dernière citation n'est pas l'exacte traduction de l'originale qui utilisait des termes un peu techniques.
 
 ### Une syntaxe lisible
 
@@ -259,57 +269,516 @@ Ordre de définition : top-down préféré.
 On s'occupe des détails si on veut en les lisant ou écrivant après.
 Prendre garde à analysis-paralysis. Imaginer avant et faire après, mais parfois améliorer après avec expérience.
 
-> "Controlling complexity is the essence of computer programming."
-- Brian Kernighan
-Brian Kernighan was one of two people who invented C, one of the most popular programming languages in the world.  He’s talking here about the important of organization, and of hiding unnecessary details, so that you can build programs without being overwhelmed by how complicated everything gets!  In fact, he says that’s the most important thing about computer programming.
+#### Le top-down design
+
+##### Un exemple
+
+Nous allons, à travers un exemple concret, mettre au point une méthode qui permet de gérer facilement les programmes complexes, c'est-à-dire qui contiennent beaucoup d'images.
+Elle se nomme le top-down design, ce qui signifie "design de haut en bas", ce que vous allez comprendre.
+
+Notre but est de dessiner une assiette de légumes, qui ressemblera à :
+![Schéma de l'assiette de légumes](http://cdsmith.files.wordpress.com/2011/09/dinner.jpg)
+
+Commençons par dessiner une image vide.
+
+	import Graphics.Gloss
+
+	picture = blank
+
+`blank` est une image vide.
+Pour l'instant, le résultat est très sobre :
+![Image vide](http://cdsmith.files.wordpress.com/2011/09/blank.jpg)
+
+Ce que vous venons d'écrire s'appelle un stub {bon terme ?}. Nous avons donné une fausse définition à `picture` pour que notre programme puisse se lancer, bien qu'il ne soit pas terminé. Pour se souvenir des stubs dans notre programme, on peut les marquer d'un commentaire.
+Si on veut éviter que notre programme compile, on peut donner `undefined` comme définition à une fonction.
+
+Définissons `diner`, qui est le nom de notre programme.
+
+	import Graphics.Gloss
+
+	picture = dinner
+	dinner = blank -- stub
+
+Le résultat est le même pour l'instant, et ces étapes ont l'air inutile, mais ne sous-estimez pas la chance de nommer les éléments !
+
+Complétons `diner` avec des stubs des éléments principaux que l'on souhaite dessiner. Si vous observez le schéma, vous voyez qu'il est grossièrement divisé en une assiette, de la nourriture, un couteau et une fourchette. Ajoutons aussi une table, qui sert d'arrière-plan à l'image entière.
+
+	import Graphics.Gloss
+
+	picture = dinner
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = blank -- stub
+	plate = blank -- stub
+	food = blank -- stub
+	fork = blank -- stub
+	knife = blank -- stub
+
+Il est inutile d'exécuter le programme parce-que le résultat est toujours le même ! Assez de `blank`, donc ; commençons à définir quelques éléments simples. Premièrement, la table qui est juste un rectangle marron de 500 x 500, autrement dit l'écran entier.
+
+	import Graphics.Gloss
+
+	picture = dinner
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+	plate = blank -- stub
+	food = blank -- stub
+	fork = blank -- stub
+	knife = blank -- stub
+
+Compilons-ça, et...
+
+	Not in scope: `brown'
+
+Nous avons utilisé la couleur `brown`, mais elle est n'est pas définie dans Gloss, mais nous pouvons le faire. Marron est plus ou moins de l'orange foncé.
+
+	import Graphics.Gloss
+
+	picture = dinner
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+	plate = blank  -- stub
+	food  = blank  -- stub
+	fork  = blank  -- stub
+	knife = blank  -- stub
+
+	brown = dark orange
+
+Le résultat :
+![Table](http://cdsmith.files.wordpress.com/2011/09/dinner1.jpg)
+
+Ajoutons l'assiette, un grand cercle pour le contour et un plus petit au-dessus pour la jante, de deux nouvelles couleurs : `gray` et `lightGray`.
+
+	import Graphics.Gloss
+
+	picture = dinner
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+
+	plate = pictures
+		[ color gray (circleSolid 175)
+		, color lightGray (circleSolid 150)
+		]
+
+	food = blank -- stub
+	fork = blank -- stub
+	knife = blank -- stub
+
+	brown = dark orange
+	lightGray = dark white
+	gray = dark lightGray
+
+![Assiette ajoutée](http://cdsmith.files.wordpress.com/2011/09/dinner2.jpg)
+
+Ajoutons, par exemple, les couverts. Que sait-on d'eux ?
+ * ce sont un couteau et une fourchette
+ * on veut qu'ils soient au milieu de l'axe y, mais opposés sur l'axe x, à peu près de 200 pixels de chaque côté.
+ * Ils sont plus hauts qu'ils ne sont larges, peut-être 300px et 50px.
+Au lieu s'occuper de tous les détails d'un coup, arrêtons-nous là. Pour l"instant, ignorons les formes différentes de la fourchette et du couteau et utilisons des rectangles. D'autre part, les positions sur la table des couverts ne font pas partie de ce qu'ils sont, donc la translation va dans la définition de `diner`, et pas celle de `fork` et `knife`.
+
+	import Graphics.Gloss
+
+	picture = dinner
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+
+	plate = pictures
+		[ color gray (circleSolid 175)
+		, color lightGray (circleSolid 150)
+		]
+
+	food = blank -- stub
+	fork = rectangleWire 50 300 -- stub
+	knife = rectangleWire 50 300 -- stub
+
+	brown = dark orange
+	lightGray = dark white
+	gray = dark lightGray
+
+Notez que `fork` et `knife` sont toujours des stubs. Ils ont une définition autre que `blank`, mais leur apparence n'est pas encore celle du résultat.
+
+![Assiette et couverts](http://cdsmith.files.wordpress.com/2011/09/dinner3.jpg)
+
+Préparons la nourriture. Nous allons la diviser en trois éléments principaux : une carotte et deux broccolis que nous allons définir comme des stubs pour l'instant.
+
+	import Graphics.Gloss
+
+	picture = dinner
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+
+	plate = pictures
+		[ color gray (circleSolid 175)
+		, color lightGray (circleSolid 150)
+		]
+
+	fork = rectangleWire 50 300 -- stub
+	knife = rectangleWire 50 300 -- stub
+
+	food = pictures
+		[ translate (-50) 50 (rotate 45 carrot)
+		, translate (-20) (-40) (rotate 20 broccoli)
+		, translate 60 (-30) (rotate (-10) broccoli)
+		]
+
+	carrot = rectangleWire 40 80 -- stub
+	broccoli = rectangleWire 80 80 -- stub
+
+	brown = dark orange
+	lightGray = dark white
+	gray = dark lightGray
+
+Ne vous inquiêtez pas si vous n'avez pas deviné les nombres des `translate` et des `rotate` du premier coup.
+
+![Dîner avec des stubs](http://cdsmith.files.wordpress.com/2011/09/dinner4.jpg)
+
+Maintenant, nous avons utiliser une astuce. On veut se concentrer sur le dessin de la carotte, mais comme elle est déplacée et tournée, c'est difficile. C'est là que `picture = diner` va devenir utile. Nous allons, temporairement, changer cette définition par `picture = carrot`.
+
+	import Graphics.Gloss
+
+	picture = carrot
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+
+	plate = pictures
+		[ color gray (circleSolid 175)
+		, color lightGray (circleSolid 150)
+		]
+
+	fork = rectangleWire 50 300 -- stub
+	knife = rectangleWire 50 300 -- stub
+
+	food = pictures
+		[ translate (-50) 50 (rotate 45 carrot)
+		, translate (-20) (-40) (rotate 20 broccoli)
+		, translate 60 (-30) (rotate (-10) broccoli)
+		]
+
+	carrot = rectangleWire 40 80 -- stub
+	broccoli = rectangleWire 80 80 -- stub
+
+	brown = dark orange
+	lightGray = dark white
+	gray = dark lightGray
+
+Le compilateur ne se préoccupe pas de toutes les autres définitions, parce-que nous lui avons dit que l'image était uniquement la carotte.
+
+![](http://cdsmith.files.wordpress.com/2011/09/dinner5.jpg)
+
+Sans toutes les distractions alentour, on devine facilement la définition de la carotte. C'est un trapèze, donc un polygône, orange qui possède un trapèze vert en guise de tige. Après un peu d'expérimentation, vous devriez obtenir quelque-chose comme :
+
+	import Graphics.Gloss
+
+	picture = carrot
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+	table = color brown (rectangleSolid 500 500)
+
+	plate = pictures
+		[ color gray (circleSolid 175)
+		, color lightGray (circleSolid 150)
+		]
+
+	fork = rectangleWire 50 300 -- stub
+	knife = rectangleWire 50 300 -- stub
+
+	food = pictures
+		[ translate (-50) 50 (rotate 45 carrot)
+		, translate (-20) (-40) (rotate 20 broccoli)
+		, translate 60 (-30) (rotate (-10) broccoli)
+		]
+
+	carrot = pictures
+		[ color green (polygon
+			[(-5, 40), (-10, 55), (10, 55), (5, 40)])
+		, color orange (polygon
+			[(-5, -40), (-20, 40), (20, 40), (5, -40)])
+	broccoli = rectangleWire 80 80 -- stub
+
+	brown = dark orange
+	lightGray = dark white
+	gray = dark lightGray
+
+Maintenant, nous pouvons vérifier que notre carotte s'inscrit bien dans `diner` en remettant `picture = carrot`. Nous allons faire de même avec tous les éléments restants : le broccoli, la fourchette et le couteau.
+Voici donc le code final :
+
+	import Graphics.Gloss
+
+
+	{-
+		This program draw a silver plate, with several food items and silverware
+	-}
+
+	picture = carrot
+
+	dinner = pictures
+		[ table
+		, plate
+		, food
+		, fork
+		, knife
+		]
+
+
+	-- Equipment.
+
+	table = color brown (rectangleSolid 500 500)
+
+	plate = pictures
+		[ color gray (circleSolid 175)
+		, color lightGray (circleSolid 150)
+		]
+
+	fork = color lightGray (pictures
+		[ handle
+		, translate 0 80 base
+		, translate (-15) 100 prong
+		, translate 15 100 prong
+		])
+    	where
+    		handle = rectangleSolid 10 250
+    		base = rectangleSolid 40 10
+    		prong = rectangleSolid 10 45
+
+	knife = color lightGray (pictures
+		[ translate 0 (-25) handle
+		, blade
+		])
+		where
+			handle = rectangleSolid 30 200
+			blade = polygon
+				[ (-15,  75)
+				, ( -5, 105)
+				, ( 15, 125)
+				, ( 15,  75)
+				]
+
+
+	-- Food.
+
+	food = pictures
+		[ translate (-50) 50 (rotate 45 carrot)
+		, translate (-20) (-40) (rotate 20 broccoli)
+		, translate 60 (-30) (rotate (-10) broccoli)
+		]
+
+	carrot = pictures
+		[ color green (polygon
+			[(-5, 40), (-10, 55), (10, 55), (5, 40)])
+		, color orange (polygon
+			[(-5, -40), (-20, 40), (20, 40), (5, -40)])
+	broccoli = color (dark green) (pictures
+		[ translate 0 (-15) base
+		, translate (-15) 0 flower
+		, translate 15 0 flower
+		, translate 0 15 flower
+		])
+		where
+			base = rectangleSolid 30 50
+			flower = circleSolid 25
+
+
+	-- New colors used in our program.
+
+	brown = dark orange
+	lightGray = dark white
+	gray = dark lightGray
+
+Nous avons aussi ajoutés des commentaires descriptifs qui divisent le programme en sections.
+Voici l'image finale :
+
+![Dîner](http://cdsmith.files.wordpress.com/2011/09/dinner7.jpg)
+
+##### Une citation
+
+Brian Kernighan, un des deux inventeurs dans les années 1970 du langage C, qui est le plus utilisé au monde pour faire des programmes, jeux, systèmes d'exploitations, ... a dit :
+> Controlling complexity is the essence of computer programming.
+He’s talking here about the important of organization, and of hiding unnecessary details, so that you can build programs without being overwhelmed by how complicated everything gets!  In fact, he says that’s the most important thing about computer programming.
+
+##### Le design
+
+Un design est une manière de programmer.
+Le top-down design consiste à peu près en ces étapes :
+ * Ecrire les définitions des fonctions appelées en premier par le programme
+ * Diviser ces définitions en à peu près trois ou quatre appels de fonctions.
+ * Parmi ces fonctions, écrire des stubs de nos fonctions personnelles.
+ * Effectuer des tests unitaires : se concentrer sur ces fonctions en complétant leurs définitions sans se préoccuper de leur place dans les autres définitions.
+ * Recommencer jusqu'à avoir complété tous les moindres détails.
+
+###### Pratique
+
+Pour la prochaine séance, programmez une image simplifiée de ces images ou d'une image de votre choix, aussi difficile, en utilisant le top-down design.
+
+![Images à programmer](http://cdsmith.files.wordpress.com/2011/09/pictureexamoptions.jpg) {découper en 4 images}
 
 ### La portée des fonctions
 
-`let` et `where`
+La portée des fonctions désigne la possibilité de leur utilisation par d'autre fonction.
+En anglais : "the function's scope".
 
-Avec `let` :
+Voici une analogie qui permet de mieux comprendre le concept. Si vous êtes en Angleterre, dire "J'ai vu la reine aujourd'hui !" est parfaitement sensé, mais si vous êtes aux Etats-Unis, ce n'est plus du tout le cas, parce-que ce pays ne possède pas de reine.
+D'une certaine manière, l'expression "la reine" a différentes significations selon le lieu ou {accent} vous êtes.
+Dans le cas des Etats-Unis, si ses habitants parlaient comme le compilateur Haskell, ils répondraient : "Not in scope: la reine".
+
+#### Le premier niveau
+
+Toutes les fonctions que l'on a défini jusqu'à maintenant sont dites au premier niveau {mauvais terme ?}.
+
+Par exemple, dans :
+
+	import Graphics.Gloss
+	
+	picture = character
+	
+	character = pictures
+		[ face
+		, translate (-10) (-15) foot
+		, translate 10 15 foot
+
+	face = circle 15
+	foot = rectangleSolid 7 4
+
+les fonctions `picture`, `character`, `face` et `foot` sont au premier niveau.
+Toutes les fonctions importées des modules sont aussi de premier niveau.
+Donc, dans `Graphics.Gloss`, `circle`, `translate`, `red`, etc. sont de premier niveau.
+
+Les fonctions de premier niveau sont accessibles par toutes les autres fonctions.
+
+#### Les niveaux inférieurs
+
+Nous allons voir comment définir des fonctions de niveaux inférieurs et leur utilité.
+
+Certaines fonctions ne sont utiles que dans une seule fonction et on souhaiterait éviter qu'elles dérangent le premier niveau, surtout lorsqu'on écrit des programmes complexes.
+On utilise pour cela, au choix, le mot-clé `let` ou `where`.
+
+Prenons l'exemple du bonhomme de neige.
 
 	import Graphics.Gloss
 
 	picture = snowman
 
-	snowman = pictures [
-		translate 0 ( 50) top,
-		translate 0 (  0) middle,
-		translate 0 (-75) bottom
-		]
-	  where
-		top    = circleSolid 50
-		middle = circleSolid 70
-		bottom = circleSolid 90
+	snowman = pictures
+			[ translate 0 50 top
+			, translate 0  0 middle
+			, translate 0 (-75) bottom
+			]
 
-Avec `where` :
+	top = circleSolid 50
+	middle = circleSolid 70
+	bottom = circleSolid 90
+
+On souhaite éviter que `top`, `middle` et `bottom` soient au premier niveau et que leur portée se réduise à la fonction `snowman`.
+
+ * Avec `let` :
 
 	import Graphics.Gloss
 
 	picture = snowman
 
 	snowman =
-		let top    = circleSolid 50
-		    middle = circleSolid 70
-		    bottom = circleSolid 90
-		in  pictures [
-		        translate 0 ( 50) top,
-		        translate 0 (  0) middle,
-		        translate 0 (-75) bottom
-		        ]
+		let top = circleSolid 50
+			middle = circleSolid 70
+			bottom = circleSolid 90
+		in pictures
+			[ translate 0 50 top
+			, translate 0 0 middle
+			, translate 0 (-75) bottom
+			]
 
-The scope of a variable is how much of the program it can be used in.  When you write more involved programs, you don’t want every single variable that you define to be visible everywhere!  As this snowman program gets bigger, maybe we might want the same name, like top, to mean something completely different when we’re drawing a different part of the scene.  That’s okay, because this top is only “in scope” during the definition of snowman.
-We talked about an analogy for this: if you’re in England, it makes perfect sense to say “I saw the queen today!”  But, if you’re in the United States, it doesn’t make sense any more, because we don’t have a queen.  The phrase “the queen” means something different depending on where you are!  So if I talked like the Haskell programming language, and you said to me “I saw the queen today!”, I might say in response, “Not in scope: the queen”.
+	La syntaxe de ce mot-clé est `let {definitions} in {expression}`. L'ensemble `let ... in ...` est une expression.
+Après `let`, on peut écrire des définitions, puis le`in`, après quoi on écrit l'expression.
+Les trois fonctions `top`, `middle`, `bottom` sont uniquement accessibles entre elles et dans l'expression qui suit le `in`.
+On peut écrire tout en une ligne : `let { top = circleSolid 50, middle = circleSolid 70, bottom = circleSolid 90 } in pictures [translate 0 50 top, translate 0 0 middle, translate 0 (-75) bottom]`, mais ce n'est pas recommandé parce-que peu lisible.
 
-Séparation en fichiers puis en bibliothèques.
+ * Avec `where` :
+
+	import Graphics.Gloss
+
+	picture = snowman
+
+	snowman = pictures
+		[ translate 0 50 top
+		, translate 0 0 middle
+		, translate 0 -75 bottom
+		]
+		where
+			top = circleSolid 50
+			middle = circleSolid 70
+			bottom = circleSolid 90
+
+	La syntaxe de ce mot-clé est `{expression} where {definitions}`.
+A la différence de `let`, les définitions de fonctions à portée limitée se trouvent après l'expression. Cette syntaxe, dans l'esprit du top-down design, est généralement préférée à celle du `let`, parce-qu'elle est jugée plus lisible.
+On peut aussi tout écrire en une ligne : `pictures [translate 0 50 top, translate 0 0 middle, translate 0 -75 bottom] where { top = circleSolid 50, middle = circleSolid 70, bottom = circleSolid 90}`.
 
 ### Le choix des noms et les commentaires
 
-> "If you’re about to add a comment, ask yourself, “How can I improve the code so that this comment isn’t needed?”"
-Steve McConnell
+Steve McConnell a dit :
+> If you’re about to add a comment, ask yourself, "How can I improve the code so that this comment isn’t needed?"
 
-This is a great concept!  We talked about using comments to explain what’s happening in your programs: but what’s even better than having a comment is organizing your program so that it’s obvious what you’re doing, and you don’t need the comment any more.  This certainly doesn’t mean never write comments: it just means see if you can keep things simple so there’s not as much to explain.
+C'est un excellent concept. Les commentaires permettent d'expliquer le programme, mais il est encore mieux d'écrire le programme de façon tellement claire et évidente que les commentaires ne sont pas utiles. Voyez donc si vous pouvez vous passer de commentaires en respectant le principe KISS {détailler}, mais mettez-en au cas ou.
+Cependant, même pour un programme clair, des commentaires sont utiles dans le cadre d'un tutoriel pour les débutants ou d'un partage du code avec des gens susceptibles de ne pas bien connaître la bibliothèque, le langage, etc.
 
 ## Pratique
 
