@@ -124,9 +124,10 @@ Une ellipse orange orientée en diagonale.
 	picture = color orange (rotate 45 (scale 2 1 (circle 100)))
 
 L'ordre des transformations a une importance.
-Par exemple, on applique `scale` sur l'image avant de de la tourner avec `rotate` dans `rotate 45 (scale 2 1 (circle 100))`. Si on effectue une rotation avant un changement d'échelle `scale 2 1 (rotate 45 (circle 100))`, l'ellispe ne se tourne pas ! En effet, faire tourner un cercle ne change rien, parce-que le cercle a une infinité d'axes de symétrie, alors que faire tourner une ellispe est visible. Essayez d'inverse `scale` et `rotate` pour voir le changement.
+Par exemple, on applique `scale` sur l'image avant de de la tourner avec `rotate` dans `rotate 45 (scale 2 1 (circle 100))`. Si on effectue une rotation avant un changement d'échelle `scale 2 1 (rotate 45 (circle 100))`, l'ellispe ne se tourne pas ! En effet, faire tourner un cercle ne change rien, parce-que le cercle a une infinité d'axes de symétrie, alors que faire tourner une ellispe est visible. Essayez d'inverse `scale` et `rotate` pour voir le changement. {Vérifier.}
+`translate` peut être utilisé sans différence avant ou après `scale`.
+`rotate` a aussi d'autres effets selon son ordre d'application avec `translate`. `rotate` tourne l'image autour de son centre. Si on a utilisé `translate` sur l'image avant de la tourner, ce point de rotation sera aux coordonnées indiquées par `translate`.
 Par contre, on peut utiliser `color` à n'importe-quel moment.
-`translate` peut également être utilisé n'importe-quand, parce-que l'image est positionnée et tournée en son centre.
 
 {Trouver un autre exemple.
 Une image abstraite, par exemple.}

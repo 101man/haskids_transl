@@ -42,6 +42,13 @@ You might have noticed that not all the forms of expressions give you pictures! 
 
 Séparer fonctions et arguments avec des espaces.
 
+substitution
+
+On utilise beaucoup de fonctions qui retournent des images, mais pas seulement.
+`light` et `dark` prennent et retournent des couleurs.
+
+![Schéma d'une fonction](http://cdsmith.files.wordpress.com/2011/10/function.png?w=595)
+
 ### Expression
 
 Une expression est une suite d'applications de fonctions. Les expressions composent les programmes.
